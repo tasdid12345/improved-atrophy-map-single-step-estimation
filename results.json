@@ -1,0 +1,32 @@
+{
+  "question": "Can a cross-validated LightGBM model with smoothed multi-scale difference features estimate voxel-wise atrophy maps from paired scans more accurately than a single-step MLP regressor on patches, in a simulated brain-slice setting?",
+  "method": "Synthetic 64x64 brain-like slice pairs with known atrophy maps; subject-level 70/30 split; MLP patch regressor vs. CV-tuned LightGBM on patches plus smoothed/multi-scale change features; Pearson r on held-out pixels.",
+  "dataset": {
+    "name": "Synthetic 2D brain-like slice pairs (generated in code)",
+    "source_url": "https://scikit-learn.org",
+    "n_rows": 136680,
+    "n_train": 60000,
+    "n_test": 41208,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "Pearson correlation between predicted and true atrophy (held-out pixels)",
+  "higher_is_better": true,
+  "baseline": "sklearn MLPRegressor (128-64, early stopping) on flattened 7x7 patches from both time points, predicting centre-pixel atrophy; stand-in for a single-step mapping network.",
+  "improved": "LightGBM regressor (num_leaves and min_child_samples chosen by 3-fold group CV on training subjects) on the same patches plus Gaussian-smoothed difference and multi-scale change features.",
+  "metrics": {
+    "baseline_score": 0.9966544053752115,
+    "improved_score": 0.9985529819531297,
+    "improvement": 0.001898576577918143,
+    "baseline_score_std": 0.00013829316811050273,
+    "improved_score_std": 2.3701145289571253e-05,
+    "baseline_mae": 0.00977167533151211,
+    "improved_mae": 0.004775409409868508,
+    "baseline_volume_abs_error": 5.343893344580377,
+    "improved_volume_abs_error": 3.2565183389864867,
+    "lgb_cv_pearson": 0.9979546187159031,
+    "lgb_num_leaves": 63,
+    "lgb_min_child_samples": 100
+  },
+  "notes": "Synthetic data only, not the paper's dataset; the paper's single-step U-Net is not reproduced, and the MLP is a stand-in. Hyperparameters were selected by CV on training subjects (seed 42) only; the test set was used once per model and seed. Model seeds 42-44 share one simulated dataset and one split, so the std reflects model randomness only. Volume error is in pixel units per scan. Results may not transfer to real MRI."
+}
