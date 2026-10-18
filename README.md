@@ -18,6 +18,29 @@ python analysis.py
 
 Results: written to `results.json` (and `figures/pearson_bar.png`).
 
+## Results (latest run)
+
+On a synthetic 2D brain-slice dataset, the standard single-step MLP patch regressor reached a held-out pixel Pearson r of 0.9967, while the cross-validated LightGBM model with smoothed multi-scale difference features reached 0.9986, a small gain of 0.0019 on the same test set.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.9967 |
+| improved_score | 0.9986 |
+| improvement | 0.001899 |
+| baseline_score_std | 0.0001383 |
+| improved_score_std | 0.0000237 |
+| baseline_mae | 0.009772 |
+| improved_mae | 0.004775 |
+| baseline_volume_abs_error | 5.344 |
+| improved_volume_abs_error | 3.257 |
+| lgb_cv_pearson | 0.998 |
+| lgb_num_leaves | 63 |
+| lgb_min_child_samples | 100 |
+
+Run on 2026-10-18. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Synthetic data only, not the paper's dataset; the paper's single-step U-Net is not reproduced, and the MLP is a stand-in. Hyperparameters were selected by CV on training subjects (seed 42) only; the test set was used once per model and seed. Model seeds 42-44 share one simulated dataset and one split, so the std reflects model randomness only. Volume error is in pixel units per scan. Results may not transfer to real MRI.
+
 ## Reference
 
 This project is motivated by the following paper:
